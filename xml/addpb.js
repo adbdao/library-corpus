@@ -6,7 +6,7 @@ var x = '.xml'
 var ru = 'utf16le'
 var wu = 'utf8'
 // 完成後的副檔名
-var afterName = '.log'
+var afterName = '.xml'
 
 // 建立函數，以便回呼使用
 function XmlAddMypb(go) {
@@ -58,12 +58,19 @@ function XmlAddMypb(go) {
                 .replace(/<聯 l/g, '<a href')
                 .replace(/聯>/g, 'a>')
                 .replace(/<_-書 .+/g, '')
-                .replace(/檔>/g, 'file>')
-                .replace(/<檔/g, '<file')
+                // 《近代大師全集書畾》特有的狀況<檔>
+                .replace(/檔>/g, '')
+                .replace(/<檔/g, '')
+                // .replace(/檔>/g, 'file>')
+                // .replace(/<檔/g, '<file')
                 .replace(/&/g, '＆')
                 .replace(/粗>/g, 'b>')
                 .replace(/經>/g, 'le>')
                 // .replace(/字母>/g, 'h1>')
+                .replace(/編目資訊>/g, 'ml>')
+                .replace(/編輯>/g, 'kai>')
+                .replace(/原書分頁>/g, 'hr>')
+                .replace(/相應部>/g, 'sep>')
                 .replace(/英文名>/g, 'eng>')
                 .replace(/<嵌?圖 f/g, '<img n')
                 .replace(/<註/g, '<fn')
@@ -106,14 +113,11 @@ function XmlAddMypb(go) {
                 .replace(/人名>/g, 'name>')
                 .replace(/問>/g, 'ask>')
                 .replace(/答>/g, 'rep>')
-                .replace(/字>/g, 'zi>')
                 .replace(/小字>/g, 'little>')
+                .replace(/字>/g, 'zi>')
                 .replace(/原出處>/g, 'ptr>')
                 .replace(/參考書>/g, 'def>')
                 .replace(/期>/g, 'l>')
-                .replace(/編目資訊>/g, 'ml>')
-                .replace(/原書分頁>/g, 'hr>')
-                .replace(/相應部>/g, 'sep>')
                 .replace(/藥>/g, 'by>')
                 .replace(/方>/g, 'bf>')
                 .replace(/症>/g, 'bz>')
@@ -178,15 +182,16 @@ function XmlAddMypb(go) {
             // 60字切行
             for (var i = 0; i < b.length; i++) {
                 b[i] = b[i].replace(/(.{60})/g, '$1\n')
-                // 接合標記內的斷行
-                .replace(/(<[^>]*)[\n|\r]([^>]*>)/g, '$1$2\n')
+                    // 接合標記內的斷行
+                    .replace(/(<[^>]*)[\n|\r]([^>]*>)/g, '$1$2\n')
             }
 
             // 第1行不好轉換，會出現亂碼，所以從第2行開始
             for (var i = 1; i < b.length; i++) {
                 // 加上冊碼頁碼
                 // 多個檔案的時候，不好算出冊碼，就省去冊碼
-                if (/<article/.test(b[i]) || i == 1 || s2 > 1023) {
+                // if (/<article/.test(b[i]) || i == 1 || s2 > 1023) {
+                if (i == 1 || s2 > 1023) {
                     s2 = 1
                     // s1++
                     // b[i] = '<pb n="' + s1 + '.' + s2 + '"/>\n' + b[i]
