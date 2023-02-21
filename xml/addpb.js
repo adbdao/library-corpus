@@ -59,8 +59,8 @@ function XmlAddMypb(go) {
                 .replace(/聯>/g, 'a>')
                 .replace(/<_-書 .+/g, '')
                 // 《近代大師全集書畾》特有的狀況<檔>
-                .replace(/檔>/g, '')
-                .replace(/<檔/g, '')
+                .replace(/<檔>/g, '')
+                .replace(/<\/檔>/g, '')
                 // .replace(/檔>/g, 'file>')
                 // .replace(/<檔/g, '<file')
                 .replace(/&/g, '＆')
